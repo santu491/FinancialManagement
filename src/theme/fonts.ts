@@ -1,0 +1,23 @@
+type Fonts = {
+  LATO_TEXT_BOLD: string;
+  LATO_TEXT_SEMI_BOLD: string;
+  LATO_TEXT_MEDIUM: string;
+  LATO: string;
+  MONTSERRAT_BOLD: string;
+  MONTSERRAT_SEMI_BOLD: string;
+  MONTSERRAT_MEDIUM: string;
+  MONTSERRAT: string;
+  MONTSERRAT_LIGHT: string;
+};
+
+export const FONTS: Fonts = {
+  LATO_TEXT_BOLD: 'LATO-Bold',
+  LATO_TEXT_SEMI_BOLD: 'LATO-Bold',
+  LATO_TEXT_MEDIUM: 'LATO-Medium',
+  LATO: 'LATO-Regular',
+  MONTSERRAT_BOLD: 'MONTSERRAT-Bold',
+  MONTSERRAT_SEMI_BOLD: 'MONTSERRAT-SemiBold',
+  MONTSERRAT_MEDIUM: 'MONTSERRAT-Medium',
+  MONTSERRAT: 'MONTSERRAT-Regular',
+  MONTSERRAT_LIGHT: 'MONTSERRAT-Light',
+};
