@@ -4,6 +4,8 @@ import {styles} from './preference.styles';
 import {PreferenceType} from '../../constants/constants';
 import {useNavigation} from '@react-navigation/native';
 import {NAVIGATION_SCREEN} from '../../navigator/navigationTypes';
+import {RightArrow} from '../../../assets/icons/icons';
+import {COLOR} from '../../theme';
 
 const preferenceData = [
   {
@@ -30,6 +32,7 @@ const PreferenceButton = (props: PreferenceButtonProps) => {
   return (
     <TouchableOpacity onPress={props.onPress} style={styles.button}>
       <Text>{props.title}</Text>
+      <RightArrow color={COLOR.BLUE} />
     </TouchableOpacity>
   );
 };

@@ -30,7 +30,7 @@ export const usePreference = () => {
       txOuter.executeSql(
         'SELECT * FROM preference WHERE type = ?',
         [route.params.type],
-        (txInner, result) => {
+        (_, result) => {
           if (result.rows.length > 0) {
             const data = result.rows.item(0);
             dispatch(updatePreferenceInfo(data));
@@ -102,19 +102,6 @@ export const usePreference = () => {
                 type: route.params.type,
               };
               insertData('preference', data);
-              //   'INSERT INTO preference(id,category,type) VALUES (?,?,?)',
-              //   [
-              //     generateUniqueId(),
-              //     JSON.stringify([category]),
-              //     route.params.type,
-              //   ],
-              //   () => {
-              //     console.log('insert success');
-              //   },
-              //   error => {
-              //     console.log('error while inserting the preference...', error);
-              //   },
-              // );
             }
           },
         );
@@ -145,8 +132,6 @@ export const usePreference = () => {
               const data = result.rows.item(0);
               const category = JSON.parse(data.category);
               const updateCategory = category.map(cat => {
-                // console.log('cat.id', cat);
-                // console.log('selectedItem', selectedItem);
                 if (cat.id === selectedItem?.id) {
                   cat.label = getValue;
                 }

@@ -5,6 +5,7 @@ import {TextInput} from '../../components/textInput/textInput';
 import {Button} from '../../components/button/button';
 import {usePreference} from './usePreference';
 import {PreferenceCategory} from '../../models/preference';
+import {PencilIcon, PencilIconFilled} from '../../../assets/icons/icons';
 
 export const UpdatePreference = () => {
   const {
@@ -23,6 +24,7 @@ export const UpdatePreference = () => {
         style={styles.labelView}
         onPress={() => onPressEdit(item)}>
         <Text>{item.label}</Text>
+        <PencilIconFilled />
       </TouchableOpacity>
     );
   };

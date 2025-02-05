@@ -16,12 +16,14 @@ const transactionType = [
 const validationSchema = () => {
   return Yup.object().shape({
     amount: Yup.string().required('Amount is required'),
+    title: Yup.string().required('Title is required'),
   });
 };
 export const useForm = () => {
   const [getCategory, setCategory] = useState<PreferenceCategory[]>();
 
   const onFormSubmit = async () => {
+    console.log('formik...', formik.isValid, formik.errors);
     const {
       transactionType: type,
       category,
@@ -43,7 +45,6 @@ export const useForm = () => {
 
     await insertData(TABLES.TRANSACTIONS, data);
     formik.resetForm();
-    console.log('formik,.....', formik);
   };
 
   const formik = useFormik({
@@ -58,8 +59,6 @@ export const useForm = () => {
     onSubmit: onFormSubmit,
   });
 
-  console.log('category...', getCategory);
-
   const getCategoryType = useCallback(async () => {
     const db = openDataBase();
     (await db).transaction(tx => {
@@ -70,7 +69,6 @@ export const useForm = () => {
         'SELECT * FROM preference WHERE type=?',
         [getType?.type],
         (_, result) => {
-          console.log('result...', result.rows.item(0));
           setCategory(JSON.parse(result.rows.item(0).category));
           formik.setFieldValue(
             'category',

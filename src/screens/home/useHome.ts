@@ -35,6 +35,11 @@ export const useHome = () => {
     }
   };
 
+  const isEmpty =
+    incomeDetails.data.length === 0 &&
+    expensesDetails.data.length === 0 &&
+    investmentDetails.data.length === 0;
+
   const getTransactionBasedOnType = async (
     db: SQLiteDatabase,
     type: string,
@@ -72,5 +77,6 @@ export const useHome = () => {
     incomeDetails,
     expensesDetails,
     totalAmount,
+    isEmpty,
   };
 };

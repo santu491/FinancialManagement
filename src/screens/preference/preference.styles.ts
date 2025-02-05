@@ -12,5 +12,8 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: COLOR.GRAY,
     marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

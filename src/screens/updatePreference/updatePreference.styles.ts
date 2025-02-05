@@ -14,6 +14,9 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
     backgroundColor: COLOR.GRAY,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   inputContainer: {
     // flexDirection: 'row',

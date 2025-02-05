@@ -29,7 +29,7 @@ export const Button = (props: ButtonProps) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.button, buttonStyle]}
+      style={[styles.button, disabled && styles.disableButton, buttonStyle]}
       activeOpacity={0.7}
       disabled={disabled}
       {...buttonProps}>
@@ -50,5 +50,8 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.LATO_TEXT_BOLD,
     fontSize: FONT_SIZE.MD,
     lineHeight: 24,
+  },
+  disableButton: {
+    backgroundColor: COLOR.whiteOpacityWith50,
   },
 });

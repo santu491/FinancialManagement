@@ -2,6 +2,11 @@ import {StyleSheet} from 'react-native';
 import {FONTS, COLOR, FONT_SIZE} from '../../theme';
 
 export const styles = StyleSheet.create({
+  noTransaction: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     backgroundColor: COLOR.WHITE,
     flex: 1,

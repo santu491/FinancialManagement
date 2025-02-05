@@ -1,65 +1,22 @@
-import {Formik} from 'formik';
 import React from 'react';
 
 import {TextInput} from '../textInput/textInput';
 import {Button} from '../button/button';
-
-import * as Yup from 'yup';
-import {useDispatch} from 'react-redux';
-import {updateExpenses, updateIncome} from '../../redux/actions/transactions';
-import {StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {Picker} from '../picker/picker';
 import {useForm} from './useForm';
 
-// const transactionType = ['Expenses', 'Income'];
-const categoryType = ['Rent', 'Hospital', 'Loan'];
-
-// const validationSchema = () => {
-//   return Yup.object().shape({
-//     amount: Yup.string().required('Amount is required'),
-//   });
-// };
-
 export const Form = () => {
-  const {transactionType, formik, getCategory, onFormSubmit} = useForm();
-  const dispatch = useDispatch();
+  const {transactionType, formik, getCategory} = useForm();
 
-  // const onFormSubmit = (values: any) => {
-  //   const payload = {
-  //     amount: values.amount,
-  //     title: values.title,
-  //     description: values.description,
-  //     type: values.transactionType,
-  //     category: values.category,
-  //   };
-  //   dispatch(
-  //     values.transactionType.label === transactionType[0].label
-  //       ? updateExpenses(payload)
-  //       : updateIncome(payload),
-  //   );
-  //   console.log('value....', values);
-  // };
   return (
-    <View>
-      {/* <Formik
-        initialValues={{
-          transactionType: transactionType[0].label,
-          //  category: categoryType[0],
-          amount: '',
-          title: '',
-          description: '',
-        }}
-        validationSchema={validationSchema()}
-        onSubmit={onFormSubmit}
-        > */}
-      {/* {({handleChange, handleSubmit, values, errors, setFieldValue}) => ( */}
+    <ScrollView>
       <>
         <View style={styles.input}>
           <Picker
             data={transactionType}
             label={'Transaction Type'}
             onValueChange={value => {
-              console.log('value...', value);
               formik.setFieldValue('transactionType', value);
             }}
             selectedValue={formik.values.transactionType}
@@ -72,6 +29,7 @@ export const Form = () => {
           label="Amount"
           required
           inputViewStyle={styles.input}
+          keyboardType="number-pad"
         />
 
         {getCategory && getCategory?.length > 0 ? (
@@ -96,9 +54,7 @@ export const Form = () => {
         <TextInput
           value={formik.values.description}
           onChangeText={formik.handleChange('description')}
-          errorMessage={formik.errors.description ?? ''}
           label="Description"
-          required
           inputViewStyle={styles.input}
           multiline
         />
@@ -106,11 +62,10 @@ export const Form = () => {
           title="Submit"
           onPress={formik.handleSubmit}
           buttonStyle={styles.input}
+          disabled={!formik.isValid}
         />
       </>
-      {/* )}
-      </Formik> */}
-    </View>
+    </ScrollView>
   );
 };
 
