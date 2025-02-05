@@ -4,6 +4,9 @@ import {styles} from './home.styles';
 
 import {useHome} from './useHome';
 import {PreferenceType} from '../../constants/constants';
+import {Transactions} from '../../models/transactions';
+import moment from 'moment';
+import {dateFormate} from '../../utils/utils';
 
 export const Home = () => {
   const {
@@ -15,7 +18,7 @@ export const Home = () => {
   } = useHome();
 
   const renderTransactionsList = ({item}) => {
-    const isExpenses = item.transactionType === PreferenceType.EXPENSES;
+    const isExpenses = item?.transactionType === PreferenceType.EXPENSES;
     return (
       <View style={styles.card}>
         <View style={styles.titleView}>
@@ -25,6 +28,7 @@ export const Home = () => {
             {item.amount}
           </Text>
         </View>
+        <Text style={styles.title}>{dateFormate(item.date)}</Text>
         <Text>{item.description}</Text>
       </View>
     );
@@ -57,7 +61,7 @@ export const Home = () => {
               <FlatList
                 data={investmentDetails.data ?? []}
                 renderItem={renderTransactionsList}
-                keyExtractor={item => item.id}
+                keyExtractor={(_, index) => index.toString()}
                 scrollEnabled={false}
               />
             </>
@@ -70,7 +74,7 @@ export const Home = () => {
               <FlatList
                 data={expensesDetails.data ?? []}
                 renderItem={renderTransactionsList}
-                keyExtractor={item => item.id}
+                keyExtractor={(_, index) => index.toString()}
                 scrollEnabled={false}
               />
             </>
@@ -83,7 +87,7 @@ export const Home = () => {
               <FlatList
                 data={incomeDetails.data ?? []}
                 renderItem={renderTransactionsList}
-                keyExtractor={item => item.id}
+                keyExtractor={(_, index) => index.toString()}
                 scrollEnabled={false}
               />
             </>

@@ -21,6 +21,8 @@ const validationSchema = () => {
 };
 export const useForm = () => {
   const [getCategory, setCategory] = useState<PreferenceCategory[]>();
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [getDate, setDate] = useState<Date>(new Date());
 
   const onFormSubmit = async () => {
     console.log('formik...', formik.isValid, formik.errors);
@@ -41,6 +43,8 @@ export const useForm = () => {
       category: category,
       categoryId: categoryId,
       transactionType: getType,
+      date: getDate.toISOString(),
+      createdAt: new Date().toISOString(),
     };
 
     await insertData(TABLES.TRANSACTIONS, data);
@@ -87,10 +91,19 @@ export const useForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.transactionType]);
 
+  const onChangeDatePicker = (event: any, selectedDate: any) => {
+    setDate(selectedDate);
+    setShowDatePicker(false);
+  };
+
   return {
+    getDate,
     transactionType,
     formik,
     getCategory,
     onFormSubmit,
+    showDatePicker,
+    setShowDatePicker,
+    onChangeDatePicker,
   };
 };

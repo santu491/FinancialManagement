@@ -2,26 +2,61 @@ import React from 'react';
 
 import {TextInput} from '../textInput/textInput';
 import {Button} from '../button/button';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Picker} from '../picker/picker';
 import {useForm} from './useForm';
 
+import {DatePickerComponent} from '../../datePicker/datePicker';
+import {COLOR, FONT_SIZE, FONTS} from '../../theme';
+import moment from 'moment';
+
 export const Form = () => {
-  const {transactionType, formik, getCategory} = useForm();
+  const {
+    transactionType,
+    formik,
+    getCategory,
+    showDatePicker,
+    onChangeDatePicker,
+    setShowDatePicker,
+    getDate,
+  } = useForm();
+
+  const formattedDate = moment(getDate).format('DD/MM/YYYY');
 
   return (
     <ScrollView>
       <>
-        <View style={styles.input}>
-          <Picker
-            data={transactionType}
-            label={'Transaction Type'}
-            onValueChange={value => {
-              formik.setFieldValue('transactionType', value);
-            }}
-            selectedValue={formik.values.transactionType}
+        {/* <CalendarPicker /> */}
+
+        <Text style={styles.datePickerTitle}>Date</Text>
+        {showDatePicker ? (
+          <DatePickerComponent
+            showDatePicker={showDatePicker}
+            date={getDate}
+            onChangePicker={onChangeDatePicker}
           />
-        </View>
+        ) : null}
+        <TouchableOpacity
+          onPress={() => setShowDatePicker(true)}
+          style={styles.datePicker}>
+          <Text style={styles.datePickerText}>{formattedDate}</Text>
+        </TouchableOpacity>
+
+        <Picker
+          data={transactionType}
+          label={'Transaction Type'}
+          onValueChange={value => {
+            formik.setFieldValue('transactionType', value);
+          }}
+          selectedValue={formik.values.transactionType}
+        />
+
         <TextInput
           value={formik.values.amount}
           onChangeText={formik.handleChange('amount')}
@@ -31,7 +66,6 @@ export const Form = () => {
           inputViewStyle={styles.input}
           keyboardType="number-pad"
         />
-
         {getCategory && getCategory?.length > 0 ? (
           <View style={styles.input}>
             <Picker
@@ -42,7 +76,6 @@ export const Form = () => {
             />
           </View>
         ) : null}
-
         <TextInput
           value={formik.values.title}
           onChangeText={formik.handleChange('title')}
@@ -72,5 +105,28 @@ export const Form = () => {
 const styles = StyleSheet.create({
   input: {
     marginTop: 30,
+  },
+  datePickerText: {
+    color: COLOR.TEXT,
+    fontFamily: FONTS.LATO,
+    fontSize: FONT_SIZE.MD,
+  },
+
+  datePicker: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 10,
+    borderRadius: 12,
+    height: 46,
+
+    marginBottom: 30,
+  },
+  datePickerTitle: {
+    marginTop: 30,
+    fontFamily: FONTS.LATO_TEXT_BOLD,
+    fontSize: FONT_SIZE.MD,
+    color: COLOR.TEXT,
+    paddingBottom: 8,
+    paddingLeft: 2,
   },
 });

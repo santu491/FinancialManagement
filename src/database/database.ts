@@ -24,7 +24,7 @@ export const createTable = async (db: SQLiteDatabase) => {
 
   db.transaction(tx => {
     tx.executeSql(
-      `CREATE TABLE IF NOT EXISTS ${TABLES.TRANSACTIONS} (id TEXT PRIMARY KEY , amount REAL, title TEXT, description TEXT, transactionType TEXT, category TEXT,categoryId TEXT)`,
+      `CREATE TABLE IF NOT EXISTS ${TABLES.TRANSACTIONS} (id TEXT PRIMARY KEY , amount REAL, title TEXT, description TEXT, transactionType TEXT, category TEXT,categoryId TEXT, date TEXT, createdAt TEXT)`,
     );
   });
 };

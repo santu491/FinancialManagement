@@ -6,4 +6,6 @@ export interface Transactions {
   id: string;
   category: string;
   categoryId: string;
+  date: Date;
+  createdAt: Date;
 }
