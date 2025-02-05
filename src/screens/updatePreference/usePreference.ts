@@ -167,5 +167,6 @@ export const usePreference = () => {
     preferenceData,
     editPreference,
     onPressEdit,
+    type: route.params.type,
   };
 };

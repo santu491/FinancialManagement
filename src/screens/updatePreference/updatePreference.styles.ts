@@ -26,4 +26,7 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
     // width: '80%',
   },
+  title: {
+    marginTop: 20,
+  },
 });

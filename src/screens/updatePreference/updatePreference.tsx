@@ -15,7 +15,10 @@ export const UpdatePreference = () => {
     preferenceData,
     editPreference,
     onPressEdit,
+    type,
   } = usePreference();
+
+  const title = `${type} Preference`;
 
   const renderPreferenceList = ({item}: {item: PreferenceCategory}) => {
     return (
@@ -43,7 +46,7 @@ export const UpdatePreference = () => {
       </View>
 
       <View>
-        <Text>Preference List</Text>
+        <Text style={styles.title}>{title.toUpperCase()}</Text>
         <FlatList
           data={
             preferenceData.category

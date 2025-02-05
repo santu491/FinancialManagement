@@ -52,6 +52,6 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   disableButton: {
-    backgroundColor: COLOR.whiteOpacityWith50,
+    backgroundColor: COLOR.GRAY,
   },
 });
