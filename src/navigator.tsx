@@ -6,6 +6,7 @@ import {ChartTab} from './navigator/chartTab';
 import {NavigationContainer} from '@react-navigation/native';
 import {Transactions} from './screens/transactions/transaction';
 import {SettingsTab} from './navigator/SettingsTab';
+import {TAB} from './navigator/navigationTypes';
 
 export const Navigator = () => {
   const Tab = createBottomTabNavigator();
@@ -16,7 +17,7 @@ export const Navigator = () => {
         screenOptions={{
           headerShown: false,
         }}>
-        <Tab.Screen component={HomeTab} name="HomeTab" />
+        <Tab.Screen component={HomeTab} name={TAB.HOME} />
         <Tab.Screen
           component={Transactions}
           name="Transactions"
@@ -25,7 +26,7 @@ export const Navigator = () => {
           }}
         />
         <Tab.Screen component={ChartTab} name="ChartTab" />
-        <Tab.Screen component={SettingsTab} name="Settings" />
+        <Tab.Screen component={SettingsTab} name={TAB.SETTINGS} />
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -6,6 +6,8 @@ import {useCallback, useEffect, useState} from 'react';
 import {PreferenceCategory} from '../../models/preference';
 import {TABLES} from '../../database/constants';
 import {generateUniqueId} from '../../utils/utils';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {NAVIGATION_SCREEN, TAB} from '../../navigator/navigationTypes';
 
 const transactionType = [
   {label: 'Expenses', type: PreferenceType.EXPENSES},
@@ -23,6 +25,8 @@ export const useForm = () => {
   const [getCategory, setCategory] = useState<PreferenceCategory[]>();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [getDate, setDate] = useState<Date>(new Date());
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const onFormSubmit = async () => {
     console.log('formik...', formik.isValid, formik.errors);
@@ -37,6 +41,7 @@ export const useForm = () => {
     const categoryId = getCategory?.find(item => item.label === category)?.id;
 
     const data = {
+      id: generateUniqueId(),
       amount: amount,
       title: title,
       description: description,
@@ -49,6 +54,8 @@ export const useForm = () => {
 
     await insertData(TABLES.TRANSACTIONS, data);
     formik.resetForm();
+
+    navigation.navigate(TAB.HOME);
   };
 
   const formik = useFormik({
@@ -63,6 +70,8 @@ export const useForm = () => {
     onSubmit: onFormSubmit,
   });
 
+  console.log('formik....data...', formik);
+
   const getCategoryType = useCallback(async () => {
     const db = openDataBase();
     (await db).transaction(tx => {
@@ -73,11 +82,16 @@ export const useForm = () => {
         'SELECT * FROM preference WHERE type=?',
         [getType?.type],
         (_, result) => {
-          setCategory(JSON.parse(result.rows.item(0).category));
-          formik.setFieldValue(
-            'category',
-            JSON.parse(result.rows.item(0).category)[0].label,
-          );
+          if (result.rows.item(0)?.category) {
+            setCategory(JSON.parse(result.rows.item(0).category));
+            formik.setFieldValue(
+              'category',
+              JSON.parse(result.rows.item(0).category)[0].label,
+            );
+          } else {
+            setCategory([]);
+            formik.setFieldValue('category', []);
+          }
         },
         error => {
           console.log('error...', error);
@@ -89,7 +103,7 @@ export const useForm = () => {
   useEffect(() => {
     getCategoryType();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.transactionType]);
+  }, [formik.values.transactionType, isFocused]);
 
   const onChangeDatePicker = (event: any, selectedDate: any) => {
     setDate(selectedDate);

@@ -5,7 +5,7 @@ import {TextInput} from '../../components/textInput/textInput';
 import {Button} from '../../components/button/button';
 import {usePreference} from './usePreference';
 import {PreferenceCategory} from '../../models/preference';
-import {PencilIcon, PencilIconFilled} from '../../../assets/icons/icons';
+import {PencilIconFilled, DeleteIcon} from '../../../assets/icons/icons';
 
 export const UpdatePreference = () => {
   const {
@@ -13,22 +13,32 @@ export const UpdatePreference = () => {
     getValue,
     updatePreference,
     preferenceData,
-    editPreference,
     onPressEdit,
     type,
+    deletePreference,
   } = usePreference();
 
   const title = `${type} Preference`;
 
   const renderPreferenceList = ({item}: {item: PreferenceCategory}) => {
     return (
-      <TouchableOpacity
-        key={item.id}
-        style={styles.labelView}
-        onPress={() => onPressEdit(item)}>
-        <Text>{item.label}</Text>
-        <PencilIconFilled />
-      </TouchableOpacity>
+      <View key={item.id} style={styles.labelView}>
+        <Text style={styles.label}>{item.label}</Text>
+        <View style={styles.iconStyle}>
+          <TouchableOpacity onPress={() => onPressEdit(item)}>
+            <PencilIconFilled />
+          </TouchableOpacity>
+
+          {preferenceData.category &&
+            JSON.parse(preferenceData.category).length > 1 && (
+              <TouchableOpacity
+                onPress={() => deletePreference(item)}
+                style={styles.deleteIcon}>
+                <DeleteIcon />
+              </TouchableOpacity>
+            )}
+        </View>
+      </View>
     );
   };
 

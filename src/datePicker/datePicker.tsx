@@ -20,7 +20,7 @@ export const DatePickerComponent = ({
         <DateTimePicker
           value={date}
           mode="date"
-          display={isIOS() ? 'inline' : 'default'}
+          display={isIOS() ? 'spinner' : 'default'}
           onChange={onChangePicker}
           maximumDate={new Date()}
         />

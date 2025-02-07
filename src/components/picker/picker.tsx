@@ -75,6 +75,7 @@ export const Picker = ({
       ) : (
         <View style={styles.pickerContainer}>
           <RNPicker
+            itemStyle={styles.pickerItem}
             mode="dialog"
             selectedValue={selectedValue}
             onValueChange={value => {
@@ -86,6 +87,7 @@ export const Picker = ({
                   label={item.label}
                   value={item.label}
                   key={item.label}
+                  color={COLOR.BLUE}
                 />
               );
             })}
@@ -116,7 +118,11 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     paddingLeft: 2,
   },
-
+  pickerItem: {
+    fontSize: FONT_SIZE.MD,
+    fontFamily: FONTS.LATO_TEXT_SEMI_BOLD,
+    color: COLOR.BLUE, // Set text color for picker items
+  },
   pickerContainer: {
     borderWidth: 1,
     borderColor: 'gray',

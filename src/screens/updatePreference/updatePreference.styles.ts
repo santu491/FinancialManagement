@@ -3,7 +3,7 @@ import {FONTS, COLOR, FONT_SIZE} from '../../theme';
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLOR.WHITE,
+    backgroundColor: COLOR.GRAY,
     flex: 1,
     padding: 16,
   },
@@ -13,10 +13,13 @@ export const styles = StyleSheet.create({
     borderColor: COLOR.GRAY,
     borderRadius: 5,
     marginTop: 10,
-    backgroundColor: COLOR.GRAY,
+    backgroundColor: COLOR.WHITE,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  label: {
+    color: COLOR.BLUE,
   },
   inputContainer: {
     // flexDirection: 'row',
@@ -28,5 +31,14 @@ export const styles = StyleSheet.create({
   },
   title: {
     marginTop: 20,
+    color: COLOR.TEXT,
+  },
+  iconStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  deleteIcon: {
+    marginLeft: 20,
   },
 });

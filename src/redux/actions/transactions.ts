@@ -25,3 +25,17 @@ export const updateTransaction = (payload: any) => {
     payload,
   };
 };
+
+export const updateFilter = (payload: any) => {
+  return {
+    type: 'UPDATE_FILTER',
+    payload,
+  };
+};
+
+export const updateTransactionTpe = (payload: any) => {
+  return {
+    type: 'UPDATE_TRANSACTION_TYPE',
+    payload,
+  };
+};

@@ -31,7 +31,7 @@ interface PreferenceButtonProps {
 const PreferenceButton = (props: PreferenceButtonProps) => {
   return (
     <TouchableOpacity onPress={props.onPress} style={styles.button}>
-      <Text>{props.title}</Text>
+      <Text style={styles.title}>{props.title}</Text>
       <RightArrow color={COLOR.BLUE} />
     </TouchableOpacity>
   );

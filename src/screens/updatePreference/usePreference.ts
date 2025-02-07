@@ -4,7 +4,7 @@ import {useRoute} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useCallback, useEffect, useState} from 'react';
 import SQLite from 'react-native-sqlite-storage';
-import {DB_NAME} from '../../database/constants';
+import {DB_NAME, TABLES} from '../../database/constants';
 import {preferenceInfo} from '../../redux/reducers/preferences/preferences';
 import {PreferenceCategory} from '../../models/preference';
 import {generateUniqueId} from '../../utils/utils';
@@ -44,6 +44,34 @@ export const usePreference = () => {
       );
     });
   }, [dispatch, route.params]);
+
+  const deletePreference = async item => {
+    const db = openDataBase();
+    (await db).transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM ${TABLES.PREFERENCE} WHERE type=?`,
+        [route.params.type],
+        (_, result) => {
+          if (result.rows.length > 0) {
+            const data = result.rows.item(0);
+            const category = JSON.parse(data.category);
+            const updateCategory = category.filter(cat => cat.id !== item.id);
+            tx.executeSql(
+              `UPDATE ${TABLES.PREFERENCE} SET category=? WHERE type=?`,
+              [JSON.stringify(updateCategory), route.params.type],
+              () => {
+                console.log('delete success');
+              },
+              error => {
+                console.log('error while updating the preference...', error);
+              },
+            );
+          }
+        },
+      );
+    });
+    getPreference();
+  };
 
   useEffect(() => {
     getPreference();
@@ -168,5 +196,6 @@ export const usePreference = () => {
     editPreference,
     onPressEdit,
     type: route.params.type,
+    deletePreference,
   };
 };
