@@ -31,10 +31,9 @@ export const CustomDateRange = () => {
     setStartDate(yesterday);
   }, []);
 
-  console.log('route', route.params);
   const onChangeDatePicker = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || getDate;
-    console.log('currentDate', currentDate);
+
     setShowDatePicker(false);
     if (startDateEnabled) {
       setStartDate(currentDate);
@@ -45,7 +44,6 @@ export const CustomDateRange = () => {
     setDate(currentDate);
   };
   const onPressButton = async () => {
-    console.log('Button Pressed');
     if (route.params.filterTransactionBasedOnDate) {
       dispatch(
         updateFilter({
@@ -118,7 +116,7 @@ const styles = StyleSheet.create({
   dateRangeButton: {
     paddingHorizontal: 12,
     paddingVertical: 20,
-    backgroundColor: COLOR.WHITE,
+    backgroundColor: COLOR.BLUE,
     marginVertical: 10,
     borderRadius: 8,
   },

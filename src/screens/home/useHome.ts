@@ -19,12 +19,16 @@ import {date} from 'yup';
 import {FILTER_TYPE} from '../../components/filters/filters';
 import {NAVIGATION_SCREEN} from '../../navigator/navigationTypes';
 import moment from 'moment';
+import {updatePreferenceInfo} from '../../redux/actions/preferences';
+import {updateAccountsInfo} from '../../redux/actions/accounts';
+import {accountsInfo} from '../../redux/reducers/accounts/accounts';
 
 export const useHome = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [getFilter, setFilter] = useState();
   const navigation = useNavigation();
   const transactionData = useSelector(transactionDetails);
+  const accountsList = useSelector(accountsInfo);
   const {investmentDetails, incomeDetails, expensesDetails, totalAmount} =
     transactionData;
   const isFocused = useIsFocused();
@@ -105,12 +109,7 @@ export const useHome = () => {
     });
   };
 
-  console.log(
-    'transactionData.transactionType...',
-    transactionData.transactionType,
-  );
   useEffect(() => {
-    console.log('getTransactions...', transactionData.filter);
     if (transactionData.filter.type !== FILTER_TYPE.ALL) {
       filterTransactionBasedOnDate(
         transactionData.filter.startDate,
@@ -330,7 +329,41 @@ export const useHome = () => {
   };
 
   const onPressTransactionType = (type: string) => {
+    // if(type === transactionData.transactionType) {}
+    // else{
+
+    // }
     dispatch(updateTransactionTpe(type));
+    if (type === PreferenceType.ACCOUNTS) {
+      onPressAccounts(type);
+    }
+  };
+
+  const onPressAccounts = async (type: string) => {
+    const db = openDataBase();
+    (await db).transaction(txOuter => {
+      txOuter.executeSql(
+        'SELECT * FROM preference WHERE type = ?',
+        [type],
+        (_, result) => {
+          if (result.rows.length > 0) {
+            const data = result.rows.item(0);
+            dispatch(updateAccountsInfo(data.category));
+          } else {
+            dispatch(updateAccountsInfo([]));
+          }
+        },
+        error => {
+          console.log('fetch error....', error);
+        },
+      );
+    });
+  };
+
+  const onPressAccount = item => {
+    console.log('item...1231234', item);
+
+    navigation.navigate(NAVIGATION_SCREEN.ACCOUNTS, {data: item});
   };
 
   return {
@@ -349,5 +382,8 @@ export const useHome = () => {
     dateRange,
     onPressTransactionType,
     transactionType: transactionData.transactionType,
+    onPressAccounts,
+    accountsList,
+    onPressAccount,
   };
 };

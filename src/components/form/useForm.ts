@@ -27,15 +27,27 @@ export const useForm = () => {
   const [getDate, setDate] = useState<Date>(new Date());
   const navigation = useNavigation();
   const isFocused = useIsFocused();
+  const [getAccountType, setAccountType] = useState<PreferenceCategory[]>();
+
+  const getTransactionMode = (type?: string) => {
+    switch (type) {
+      case PreferenceType.EXPENSES:
+        return 'Debit';
+      case PreferenceType.INCOME:
+        return 'Credit';
+      case PreferenceType.INVESTMENTS:
+        return 'Investment';
+    }
+  };
 
   const onFormSubmit = async () => {
-    console.log('formik...', formik.isValid, formik.errors);
     const {
       transactionType: type,
       category,
       amount,
       title,
       description,
+      accountType,
     } = formik.values;
     const getType = transactionType.find(item => item.label === type)?.type;
     const categoryId = getCategory?.find(item => item.label === category)?.id;
@@ -50,6 +62,10 @@ export const useForm = () => {
       transactionType: getType,
       date: getDate.toISOString(),
       createdAt: new Date().toISOString(),
+      accountType: accountType,
+      accountTypeId: getAccountType?.find(item => item.label === accountType)
+        ?.id,
+      transactionMode: getTransactionMode(getType),
     };
 
     await insertData(TABLES.TRANSACTIONS, data);
@@ -65,12 +81,11 @@ export const useForm = () => {
       amount: '',
       title: '',
       description: '',
+      accountType: getAccountType ? getAccountType[0]?.label ?? '' : '',
     },
     validationSchema: validationSchema,
     onSubmit: onFormSubmit,
   });
-
-  console.log('formik....data...', formik);
 
   const getCategoryType = useCallback(async () => {
     const db = openDataBase();
@@ -100,6 +115,34 @@ export const useForm = () => {
     });
   }, [formik]);
 
+  const getAccountTypeInfo = useCallback(async () => {
+    const db = openDataBase();
+    (await db).transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM preference WHERE type=?',
+        [PreferenceType.ACCOUNTS],
+        (_, result) => {
+          if (result.rows.item(0).category) {
+            setAccountType(JSON.parse(result.rows.item(0).category));
+            formik.setFieldValue(
+              'accountType',
+              JSON.parse(result.rows.item(0).category)[0].label,
+            );
+          } else {
+            console.log('data is not available');
+          }
+        },
+        error => {
+          console.log('error...', error);
+        },
+      );
+    });
+  }, []);
+
+  useEffect(() => {
+    getAccountTypeInfo();
+  }, []);
+
   useEffect(() => {
     getCategoryType();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,5 +162,6 @@ export const useForm = () => {
     showDatePicker,
     setShowDatePicker,
     onChangeDatePicker,
+    getAccountType,
   };
 };

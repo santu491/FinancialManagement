@@ -145,7 +145,6 @@ export const usePreference = () => {
     setValue(item.label);
     setIsEdit(true);
     setSelectedItem(item);
-    console.log('selectedItem', item);
   };
 
   const editPreference = async () => {

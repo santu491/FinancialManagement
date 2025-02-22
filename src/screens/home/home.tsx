@@ -15,9 +15,19 @@ import {PreferenceType} from '../../constants/constants';
 import {Transactions} from '../../models/transactions';
 import moment from 'moment';
 import {dateFormate} from '../../utils/utils';
-import {DeleteIcon} from '../../../assets/icons/icons';
+import {DeleteIcon, RightArrow} from '../../../assets/icons/icons';
 import {Filters} from '../../components/filters/filters';
 import {Button} from '../../components/button/button';
+import {COLOR} from '../../theme';
+
+const PreferenceButton = (props: PreferenceButtonProps) => {
+  return (
+    <TouchableOpacity onPress={props.onPress} style={styles.button}>
+      <Text style={styles.title}>{props.title}</Text>
+      <RightArrow color={COLOR.BLUE} />
+    </TouchableOpacity>
+  );
+};
 
 export const Home = () => {
   const {
@@ -34,11 +44,23 @@ export const Home = () => {
     dateRange,
     onPressTransactionType,
     transactionType,
+    onPressAccounts,
+    accountsList,
+    onPressAccount,
   } = useHome();
+
+  const renderPreferences = ({item}) => {
+    return (
+      <PreferenceButton
+        title={item.label}
+        onPress={() => onPressAccount(item)}
+      />
+    );
+  };
 
   const renderTransactionsList = ({item}) => {
     const isExpenses = item?.transactionType === PreferenceType.EXPENSES;
-    console.log('item...', item);
+
     return (
       <View style={styles.card}>
         <View style={styles.titleView}>
@@ -49,8 +71,9 @@ export const Home = () => {
           </Text>
         </View>
         <Text style={styles.title}>{dateFormate(item.date)}</Text>
+        <Text style={styles.title}>Account Type: {item.accountType}</Text>
 
-        <Text>{item.description}</Text>
+        <Text style={styles.title}>{item.description}</Text>
         <TouchableOpacity onPress={() => deleteTransaction(item.id)}>
           <DeleteIcon />
         </TouchableOpacity>
@@ -58,16 +81,15 @@ export const Home = () => {
     );
   };
 
-  console.log('investmentDetails.section......', investmentDetails.section);
   return (
     <ScrollView style={styles.container}>
-      {isEmpty ? (
+      {/* {isEmpty ? (
         <View style={styles.noTransaction}>
           <Text style={styles.title}>No Transactions to show</Text>
         </View>
-      ) : (
-        <>
-          {/* <Text style={styles.totalAmountTitle}>
+      ) : ( */}
+      <>
+        {/* <Text style={styles.totalAmountTitle}>
             Total Amount:{' '}
             <Text
               style={
@@ -79,121 +101,135 @@ export const Home = () => {
             </Text>
           </Text> */}
 
-          <Button title="Filter" onPress={onPressFilter} />
+        <Button title="Filter" onPress={onPressFilter} />
 
-          <Text style={styles.transactionTypeTitle}>
-            Date Range: <Text style={styles.dateRange}>{dateRange}</Text>
-          </Text>
+        <Text style={styles.transactionTypeTitle}>
+          Date Range: <Text style={styles.dateRange}>{dateRange}</Text>
+        </Text>
 
-          <View style={styles.transactionButtonsView}>
-            <Button
-              title="Income"
-              onPress={() => onPressTransactionType(PreferenceType.INCOME)}
-              buttonStyle={[
-                styles.transactionButton,
-                transactionType === PreferenceType.INCOME &&
-                  styles.selectedButton,
-              ]}
-            />
-            <Button
-              title="Expenses"
-              buttonStyle={[
-                styles.transactionButton,
-                transactionType === PreferenceType.EXPENSES &&
-                  styles.selectedButton,
-              ]}
-              onPress={() => onPressTransactionType(PreferenceType.EXPENSES)}
-            />
-            <Button
-              title="Investment"
-              buttonStyle={[
-                styles.transactionButton,
-                transactionType === PreferenceType.INVESTMENTS &&
-                  styles.selectedButton,
-              ]}
-              onPress={() => onPressTransactionType(PreferenceType.INVESTMENTS)}
-            />
-          </View>
+        <View style={styles.transactionButtonsView}>
+          <Button
+            title="Income"
+            onPress={() => onPressTransactionType(PreferenceType.INCOME)}
+            buttonStyle={[
+              styles.transactionButton,
+              transactionType === PreferenceType.INCOME &&
+                styles.selectedButton,
+            ]}
+          />
+          <Button
+            title="Expenses"
+            buttonStyle={[
+              styles.transactionButton,
+              transactionType === PreferenceType.EXPENSES &&
+                styles.selectedButton,
+            ]}
+            onPress={() => onPressTransactionType(PreferenceType.EXPENSES)}
+          />
+          <Button
+            title="Investment"
+            buttonStyle={[
+              styles.transactionButton,
+              transactionType === PreferenceType.INVESTMENTS &&
+                styles.selectedButton,
+            ]}
+            onPress={() => onPressTransactionType(PreferenceType.INVESTMENTS)}
+          />
+        </View>
+        <Button
+          title="Accounts"
+          buttonStyle={[
+            styles.transactionButton,
+            transactionType === PreferenceType.ACCOUNTS &&
+              styles.selectedButton,
+            {marginTop: 10},
+          ]}
+          onPress={() => onPressTransactionType(PreferenceType.ACCOUNTS)}
+        />
 
-          {showFilter ? (
-            <Filters onPress={updateFilters} selectedFilter={getFilter} />
+        {showFilter ? (
+          <Filters onPress={updateFilters} selectedFilter={getFilter} />
+        ) : null}
+
+        <>
+          {transactionType === PreferenceType.INVESTMENTS ? (
+            <>
+              {investmentDetails.data.length > 0 ? (
+                <>
+                  <Text style={styles.transactionTypeTitle}>
+                    {investmentDetails.title}
+                  </Text>
+                  <Text style={styles.totalAmountTitle}>
+                    Total Amount: {investmentDetails.total}
+                  </Text>
+
+                  <SectionList
+                    sections={investmentDetails.data}
+                    renderItem={renderTransactionsList}
+                    keyExtractor={(_, index) => index.toString()}
+                    renderSectionHeader={({section: {title}}) => {
+                      return <Text style={styles.sectionHeader}>{title}</Text>;
+                    }}
+                  />
+                </>
+              ) : null}
+            </>
           ) : null}
+        </>
 
-          <>
-            {transactionType === PreferenceType.INVESTMENTS ? (
-              <>
-                {investmentDetails.data.length > 0 ? (
-                  <>
-                    <Text style={styles.transactionTypeTitle}>
-                      {investmentDetails.title}
-                    </Text>
+        <>
+          {transactionType === PreferenceType.EXPENSES ? (
+            <>
+              {expensesDetails.data.length > 0 ? (
+                <>
+                  <Text style={styles.transactionTypeTitle}>
+                    {expensesDetails.title}
+                  </Text>
+                  <Text style={styles.totalAmountTitle}>
+                    Total Amount: {expensesDetails.total}
+                  </Text>
 
-                    <SectionList
-                      sections={investmentDetails.data}
-                      renderItem={renderTransactionsList}
-                      keyExtractor={(_, index) => index.toString()}
-                      renderSectionHeader={({section: {title}}) => {
-                        return (
-                          <Text style={styles.sectionHeader}>{title}</Text>
-                        );
-                      }}
-                    />
-                  </>
-                ) : null}
-              </>
-            ) : null}
-          </>
+                  <SectionList
+                    sections={expensesDetails.data}
+                    renderItem={renderTransactionsList}
+                    keyExtractor={(_, index) => index.toString()}
+                    renderSectionHeader={({section: {title}}) => {
+                      return <Text style={styles.sectionHeader}>{title}</Text>;
+                    }}
+                  />
+                </>
+              ) : null}
+            </>
+          ) : null}
+        </>
 
-          <>
-            {transactionType === PreferenceType.EXPENSES ? (
-              <>
-                {expensesDetails.data.length > 0 ? (
-                  <>
-                    <Text style={styles.transactionTypeTitle}>
-                      {expensesDetails.title}
-                    </Text>
+        <>
+          {transactionType === PreferenceType.INCOME ? (
+            <>
+              {incomeDetails.data.length > 0 ? (
+                <>
+                  <Text style={styles.transactionTypeTitle}>
+                    {incomeDetails.title}
+                  </Text>
 
-                    <SectionList
-                      sections={expensesDetails.data}
-                      renderItem={renderTransactionsList}
-                      keyExtractor={(_, index) => index.toString()}
-                      renderSectionHeader={({section: {title}}) => {
-                        return (
-                          <Text style={styles.sectionHeader}>{title}</Text>
-                        );
-                      }}
-                    />
-                  </>
-                ) : null}
-              </>
-            ) : null}
-          </>
+                  <Text style={styles.totalAmountTitle}>
+                    Total Amount: {incomeDetails.total}
+                  </Text>
 
-          <>
-            {transactionType === PreferenceType.INCOME ? (
-              <>
-                {incomeDetails.data.length > 0 ? (
-                  <>
-                    <Text style={styles.transactionTypeTitle}>
-                      {incomeDetails.title}
-                    </Text>
-
-                    <SectionList
-                      sections={incomeDetails.data}
-                      renderItem={renderTransactionsList}
-                      keyExtractor={(_, index) => index.toString()}
-                      renderSectionHeader={({section: {title}}) => {
-                        return (
-                          <Text style={styles.sectionHeader}>{title}</Text>
-                        );
-                      }}
-                    />
-                  </>
-                ) : null}
-              </>
-            ) : null}
-          </>
-          {/* {expensesDetails.data.length > 0 ? (
+                  <SectionList
+                    sections={incomeDetails.data}
+                    renderItem={renderTransactionsList}
+                    keyExtractor={(_, index) => index.toString()}
+                    renderSectionHeader={({section: {title}}) => {
+                      return <Text style={styles.sectionHeader}>{title}</Text>;
+                    }}
+                  />
+                </>
+              ) : null}
+            </>
+          ) : null}
+        </>
+        {/* {expensesDetails.data.length > 0 ? (
             <>
               <Text style={styles.transactionTypeTitle}>
                 {expensesDetails.title}
@@ -223,8 +259,24 @@ export const Home = () => {
               />
             </>
           ) : null} */}
+
+        <>
+          {transactionType === PreferenceType.ACCOUNTS ? (
+            <>
+              {accountsList.length > 0 ? (
+                <>
+                  <FlatList
+                    data={JSON.parse(accountsList)}
+                    renderItem={renderPreferences}
+                    keyExtractor={item => item.type}
+                  />
+                </>
+              ) : null}
+            </>
+          ) : null}
         </>
-      )}
+      </>
+      {/* )} */}
     </ScrollView>
   );
 };

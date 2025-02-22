@@ -1,8 +1,6 @@
 import SQLite, {SQLiteDatabase} from 'react-native-sqlite-storage';
 import {DB_NAME, TABLES} from './constants';
 
-// import {openDataBase} from './database';
-
 SQLite.DEBUG(true);
 SQLite.enablePromise(true);
 
@@ -24,7 +22,7 @@ export const createTable = async (db: SQLiteDatabase) => {
 
   db.transaction(tx => {
     tx.executeSql(
-      `CREATE TABLE IF NOT EXISTS ${TABLES.TRANSACTIONS} (id TEXT PRIMARY KEY , amount REAL, title TEXT, description TEXT, transactionType TEXT, category TEXT,categoryId TEXT, date TEXT, createdAt TEXT)`,
+      `CREATE TABLE IF NOT EXISTS ${TABLES.TRANSACTIONS} (id TEXT PRIMARY KEY , amount REAL, title TEXT, description TEXT, transactionType TEXT, category TEXT,categoryId TEXT, date TEXT, createdAt TEXT, accountType TEXT, accountTypeId TEXT, transactionMode TEXT)`,
     );
   });
 };

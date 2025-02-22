@@ -25,6 +25,7 @@ export const Form = () => {
     onChangeDatePicker,
     setShowDatePicker,
     getDate,
+    getAccountType,
   } = useForm();
 
   const formattedDate = moment(getDate).format('DD/MM/YYYY');
@@ -56,6 +57,17 @@ export const Form = () => {
           }}
           selectedValue={formik.values.transactionType}
         />
+
+        {getAccountType && getAccountType.length > 0 ? (
+          <Picker
+            data={getAccountType}
+            label={'Account Type'}
+            onValueChange={value => {
+              formik.setFieldValue('accountType', value);
+            }}
+            selectedValue={formik.values.accountType}
+          />
+        ) : null}
 
         <TextInput
           value={formik.values.amount}

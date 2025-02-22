@@ -3,6 +3,7 @@ import React from 'react';
 import {Home} from '../screens/home/home';
 import {NAVIGATION_SCREEN} from './navigationTypes';
 import {CustomDateRange} from '../components/customDateRange/customDateRange';
+import {Accounts} from '../screens/accounts/accounts';
 
 export const HomeTab = () => {
   const Stack = createNativeStackNavigator();
@@ -21,6 +22,14 @@ export const HomeTab = () => {
       <Stack.Screen
         component={CustomDateRange}
         name={NAVIGATION_SCREEN.CUSTOM_DATE_RANGE}
+        options={{
+          headerShown: true,
+        }}
+      />
+
+      <Stack.Screen
+        component={Accounts}
+        name={NAVIGATION_SCREEN.ACCOUNTS}
         options={{
           headerShown: true,
         }}
