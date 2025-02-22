@@ -140,8 +140,10 @@ export const useForm = () => {
   }, []);
 
   useEffect(() => {
-    getAccountTypeInfo();
-  }, []);
+    if (isFocused) {
+      getAccountTypeInfo();
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     getCategoryType();
