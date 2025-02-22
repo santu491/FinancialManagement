@@ -53,10 +53,10 @@ export const Filters = ({
     return (
       <TouchableOpacity style={styles.list} onPress={() => onPress(item)}>
         <Text
-          style={
-            (styles.label,
-            transactionData.filter.type === item.type && styles.selectedFilter)
-          }>
+          style={[
+            styles.label,
+            transactionData.filter.type === item.type && styles.selectedFilter,
+          ]}>
           {item.label}
         </Text>
       </TouchableOpacity>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.WHITE,
   },
   list: {
-    backgroundColor: COLOR.WHITE,
+    backgroundColor: COLOR.GRAY,
     height: 50,
     marginTop: 1,
     justifyContent: 'center',
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: FONTS.LATO_TEXT_BOLD,
     fontSize: FONT_SIZE.LG,
-    color: COLOR.TEXT,
+    color: 'green',
   },
   selectedFilter: {
     color: COLOR.BLUE,
